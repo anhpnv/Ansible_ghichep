@@ -1,0 +1,7 @@
+- name: show return value of command module
+  hosts: vietanh
+  tasks:
+    - name: capture output of whoami command
+      command: whoami
+      register: login
+    - debug: msg="{{ login.stdout }} is result of command whoami"
