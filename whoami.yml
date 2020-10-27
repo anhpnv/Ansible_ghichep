@@ -5,3 +5,8 @@
       command: whoami
       register: login
     - debug: msg="{{ login.stdout }} is result of command whoami"
+
+    - name: Install package
+      apt:
+        name: apache2
+      become: True
