@@ -1,5 +1,20 @@
 Tìm hiểu về Ansible:
-## 1. Playbook
+
+## 1. Ansible
+### 1.1 Ansible là gì
+Ansible là 1 agent-less IT automation tự động hóa việc cung cấp cloud, configuration management, triển khai ứng dụng, điều phối dịch vụ nội bộ,...
+Ansible được thiết kế  với mục đích: bảo mật, dễ học, dễ sử dụng.
+### 1.2 Ansible architecture
+
+Ansible sử dụng kiến trúc agentless để giao tiếp các máy khác mà không cần agent, cụ thể là ssh.
+
+![Architecture](img/Architecture.jpg)
+
+Như ta thấy trong hình trên, ý tưởng chính của ansible đó là có 1 hoặc nhiều trung tâm điều khiển(command centers hình trái) mà ta có thể phát ra các lệnh chạy trên remote server thông qua các lệnh
+
+Host inventory file là file chứa thông tin của các remote server, nơi mà các **plays** sẽ được thực thi.
+
+## 2. Playbook
 Playbook là 1 file được định dạng YAML format
 
 Một playbook bao gồm 1 hoặc nhiều plays trong 1 list. Trong mỗi 'play' các task sẽ chạy từ trên xuống dưới.Các playbooks với nhiều 'plays' có thể triển khai điều phối trên nhiều máy chủ. Mỗi play chứa các thành phần:
@@ -89,4 +104,53 @@ vietanh                    : ok=3    changed=1    unreachable=0    failed=0    s
 Trong phần out, như đã thấy, 2 task [capture output of whoami command] và [debug] đã thực hiện thành công, tuy nhiên có 1 task được thực thi trước đó, đấy là [Gathering Facts]
 
 Trước khi thực hiện các task trong playbook, ansible sẽ thực hiện task Gathering Facts sử dụng để thu thập thông tin về máy nó connect tới.
+
+## 3.Variable
+
+Ansible sử dụng variables để quản lý sự khác biệt giữa các hệ thống. Với Ansible, ta có thể thực thi các tasks và playbooks trên nhiều hệ thống khác nhau với lệnh đơn.Để đại diện cho các biến giữa các hệ thống này, ta có thể khởi tạo biến với cú pháp YAML(playbooks, inventory, các file, roles tái sử dụng), bao gồm lists và dictionaries.
+
+### List variables
+
+#### Defining variables as lists
+
+Ta có thể định nghĩa các biến như 1 lists trong YAML như sau:
+
+```yaml
+region:
+  - northeast
+  - southeast
+  - midwest
+```
+
+
+#### Referencing list variables
+
+Khi gọi, ta sẽ sử dụng như sau:
+
+```yaml
+region: "{{ region[0] }}" # Trả về northeast
+```
+### Dictionary variables
+
+#### Defining variables as key:value dictionaries
+
+Ta có thể định nghĩa các biến như 1 Dict như sau:
+
+```yaml
+foo:
+  field1: one
+  field2: two
+```
+
+#### Referencing key: value dictionary variables
+
+Khi gọi giá trị trong 1 dict, ta làm như sau:
+
+```yaml
+foo['field1']
+foo.field1
+```
+
+
+## 
 
