@@ -1,0 +1,5 @@
+- name: Up Service cadvisor
+  register: container_status
+  command: docker-compose -f /home/onepiece/Documents/Ansible-Tutorial/dockprom/docker-compose-cadvisor.yml up -d
+
+- debug: msg="{{ container_status.stdout }}"

@@ -1,0 +1,5 @@
+- name: Up Service alertmanager
+  register: container_status
+  command: docker-compose -f /home/onepiece/Documents/Ansible-Tutorial/dockprom/docker-compose-alertmanager.yml up -d
+
+- debug: msg="{{ container_status.stdout }}"

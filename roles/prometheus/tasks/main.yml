@@ -1,0 +1,5 @@
+- name: Up Service prometheus
+  register: container_status
+  command: docker-compose -f /home/onepiece/Documents/Ansible-Tutorial/dockprom/docker-compose-prometheus.yml up -d
+
+- debug: msg="{{ container_status.stdout }}"
