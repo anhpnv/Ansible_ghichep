@@ -1,0 +1,11 @@
+---
+  - name: Setup Monitoring Services
+    hosts: vietanh
+    become: yes
+    become_user: root
+    roles:
+       - prometheus
+       - alertmanager
+       - nodeexporter
+       - cadvisor
+       - grafana
