@@ -22,7 +22,7 @@ groups:
 - name: High CPU load
   rules:
   - alert: high_cpu_load
-    expr: 70 < 100 - (sum (sum by (mode) (node_cpu_seconds_total{mode="idle"})) / (sum (sum by (mode) (node_cpu_seconds_total)))) * 100 < 90
+    expr: 70 < 100 - (avg by (instance) (irate(node_cpu_seconds_total{mode="idle"}[5m])) * 100) < 90
     for: 30s
     labels:
       severity: warning
@@ -31,7 +31,7 @@ groups:
       description: "The cpu load in local machine is at {{ humanize $value }}% (> 70%)."
 
   - alert: high_cpu_load
-    expr:  100 - (sum (sum by (mode) (node_cpu_seconds_total{mode="idle"})) / (sum (sum by (mode) (node_cpu_seconds_total)))) * 100 >  90
+    expr:  100 - (avg by (instance) (irate(node_cpu_seconds_total{mode="idle"}[5m])) * 100) >  90
     for: 30s
     labels:
       severity: critical
