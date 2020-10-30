@@ -8,7 +8,7 @@ groups:
       severity: warning
     annotations:
       summary: "High memory load"
-      description: "The memory load in local machine is at {{ humanize $value }}% ( > 70%)"
+      description: "The memory load in local machine is at {{ humanize $value }}% ( > 70%). Reported by instance {{ $labels.instance }} of job {{ $labels.job }}."
 
   - alert: high_memory_load
     expr: 100 * (node_memory_MemTotal_bytes - (node_memory_MemFree_bytes + node_memory_Cached_bytes + node_memory_Buffers_bytes))/node_memory_MemTotal_bytes >  90
@@ -17,47 +17,47 @@ groups:
       severity: critical
     annotations:
       summary: "High memory load"
-      description: "The memory load in local machine is at {{ humanize $value }}% (> 90%)"
+      description: "The memory load in local machine is at {{ humanize $value }}% (> 90%). Reported by instance {{ $labels.instance }} of job {{ $labels.job }}."
 
 - name: High CPU load
   rules:
   - alert: high_cpu_load
-    expr: 70 < 100 - (avg by (instance) (irate(node_cpu_seconds_total{mode="idle"}[5m])) * 100) < 90
+    expr: 70 < 100 - (avg by (instance,job) (irate(node_cpu_seconds_total{mode="idle"}[5m])) * 100) < 90
     for: 30s
     labels:
       severity: warning
     annotations:
       summary: "High cpu load"
-      description: "The cpu load in local machine is at {{ humanize $value }}% (> 70%)."
+      description: "The cpu load in local machine is at {{ humanize $value }}% (> 70%). Reported by instance {{ $labels.instance }} of job {{ $labels.job }}."
 
   - alert: high_cpu_load
-    expr:  100 - (avg by (instance) (irate(node_cpu_seconds_total{mode="idle"}[5m])) * 100) >  90
+    expr:  100 - (avg by (instance,job) (irate(node_cpu_seconds_total{mode="idle"}[5m])) * 100) >  90
     for: 30s
     labels:
       severity: critical
     annotations:
       summary: "High cpu load"
-      description: "The cpu load in local machine is at {{ humanize $value }}% (> 90%)."
+      description: "The cpu load in local machine is at {{ humanize $value }}% (> 90%). Reported by instance {{ $labels.instance }} of job {{ $labels.job }}."
 
 - name: High Disk usage
   rules:
   - alert: high_disk_usage
-    expr: 70 < sum (node_filesystem_avail_bytes)  / sum(node_filesystem_size_bytes) < 95
+    expr: 70 < 100 - sum by (instance, job) (node_filesystem_avail_bytes) * 100  / sum by (instance, job) (node_filesystem_size_bytes) < 95
     for: 30s
     labels:
       severity: warning
     annotations:
       summary: "High Disk load"
-      description: "The Disk load in local machine is at {{ humanize $value }}% (> 70%)."
+      description: "The Disk load in local machine is at {{ humanize $value }}% (> 70%). Reported by instance {{ $labels.instance }} of job {{ $labels.job }}."
 
   - alert: high_disk_usage
-    expr: sum (node_filesystem_avail_bytes)  / sum (node_filesystem_size_bytes) > 95
+    expr: 100 - sum by (instance, job) (node_filesystem_avail_bytes) * 100  / sum by (instance, job) (node_filesystem_size_bytes) > 95
     for: 30s
     labels:
       severity: critical
     annotations:
       summary: "High Disk load"
-      description: "The Disk load in local machine is at {{ humanize $value }}% (> 95%)."
+      description: "The Disk load in local machine is at {{ humanize $value }}% (> 95%). Reported by instance {{ $labels.instance }} of job {{ $labels.job }}."
   
 - name: example
   rules:
